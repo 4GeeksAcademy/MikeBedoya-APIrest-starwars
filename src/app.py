@@ -22,7 +22,7 @@ MIGRATE = Migrate(app, db)
 db.init_app(app)
 CORS(app)
 setup_admin(app)
-# Handle/serialize errors like a JSON object
+
 @app.errorhandler(APIException)
 def handle_invalid_usage(error):
     return jsonify(error.to_dict()), error.status_code
@@ -46,7 +46,7 @@ def get_all_people():
     #     "msg": "Hello, this is your GET /people response ",
     #     "results": results
     # }
-    return jsonify(results), 200               #se vuoi che appaia response_body lo metti tra parentesi, altrimenti metti direttamente "results" che è la variabile che racchiude la lista
+    return jsonify(results), 200             
 @app.route('/people/<int:people_id>', methods=['GET'])
 def get_single_people(people_id):
     single_people = People.query.get(people_id)
@@ -82,10 +82,10 @@ def get_all_favorites():
     return jsonify(results_favorites), 200
 @app.route('/favorites/planet/<int:planet_id>', methods=['POST'])
 def add_planet_to_favorites( planet_id):
-    print(request)                      #request è un oggetto di Flask che contiene tutte le informazioni relative alla richiesta dal client
+    print(request)                     
     print(request.json)
-    user = User.query.first()    # Recupera il primo utente dal database
-    planet = Planet.query.get(planet_id)   # Recupera il pianeta dal database (controlla se esiste), si potrebbe fare anche direttamente con l'URL senza questo passaggio e nel fav metto planet_id = planet_id
+    user = User.query.first()   
+    planet = Planet.query.get(planet_id)   
     if not planet :
         return jsonify({"error" : "Planet not found"}), 404
     new_fav = Favorites(user_id= user.id, planet_id = planet.id, planet_name = planet.name)
@@ -94,7 +94,7 @@ def add_planet_to_favorites( planet_id):
     return jsonify({"message": "planet successfully added"}), 200
 @app.route('/favorites/planet/<int:planet_id>', methods=['DELETE'])
 def delete_planet_to_favorites(planet_id):
-    print(request)                      #request è un oggetto di Flask che contiene tutte le informazioni relative alla richiesta dal client
+    print(request)                      
     print(request.json)
     user = User.query.first()
     planet = Planet.query.get(planet_id)
@@ -109,10 +109,10 @@ def delete_planet_to_favorites(planet_id):
     return jsonify({"message" : "favorite planet successfully deleted"}), 200
 @app.route('/favorites/people/<int:people_id>', methods=['POST'])
 def add_people_to_favorites(people_id):
-    print(request)                      #request è un oggetto di Flask che contiene tutte le informazioni relative alla richiesta dal client
+    print(request)                      
     print(request.json)
-    user = User.query.first()    # Recupera il primo utente dal database
-    people = People.query.get(people_id)   # Recupera il personaggio dal database (controlla se esiste), si potrebbe fare anche direttamente con l'URL senza questo passaggio e nel fav metto people_id = people_id
+    user = User.query.first()    
+    people = People.query.get(people_id)   
     if not people :
         return jsonify({"error" : "Character not found"}), 404
     new_fav = Favorites(user_id= user.id, people_id = people.id, people_name = people.name)
@@ -121,13 +121,13 @@ def add_people_to_favorites(people_id):
     return jsonify({"message": "character successfully added"}), 200
 @app.route('/favorites/people/<int:people_id>', methods=['DELETE'])
 def delete_people_to_favorites(people_id):
-    print(request)                      #request è un oggetto di Flask che contiene tutte le informazioni relative alla richiesta dal client
+    print(request)                     
     print(request.json)
     user = User.query.first()
     people = People.query.get(people_id)
     if not people :
         return jsonify({"error" : "people not found"}), 404
-    fav_to_delete = Favorites.query.filter_by(user_id= user.id, people_id = people.id).first()    # Trova il record di favorite da eliminare
+    fav_to_delete = Favorites.query.filter_by(user_id= user.id, people_id = people.id).first()    
     print("People ID:", people.id)
     if not fav_to_delete :
         return jsonify({"error": "Favorite not found"}), 404

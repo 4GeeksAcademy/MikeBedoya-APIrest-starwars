@@ -11,9 +11,9 @@ class User(db.Model):
         return '<User %r>' % self.email
     def serialize(self):
         return {
-            "id": self.id,          #self si usa per accedere agli attributi(colonne) di User, in questo caso l'id e la mail
+            "id": self.id,         
             "email": self.email,
-            # do not serialize the password, its a security breach
+           
         }
 class People(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -22,10 +22,10 @@ class People(db.Model):
     eye_color = db.Column(db.String(80), unique=False, nullable=False)
     hair_color = db.Column(db.String(80), unique=False, nullable=False)
     favorites = db.relationship("Favorites", backref='people')
-    def __repr__(self):                                                    #come mi riferisco al elemento del modello
+    def __repr__(self):                                                 
         return '<People %r>' % self.name
     def serialize(self):
-        return {                                                          #ciò che voglio mostrare e lo mostro come dizionario
+        return {                                             
             "id": self.id,
             "name": self.name,
             "gender": self.gender,
@@ -39,10 +39,10 @@ class Planet(db.Model):
     population = db.Column(db.Integer, unique=False, nullable=False)
     terrain = db.Column(db.String(80), unique=False, nullable=False)
     favorites = db.relationship("Favorites", backref='planet')
-    def __repr__(self):                                                    #come mi riferisco al elemento del modello
+    def __repr__(self):                                                   
         return '<Planet %r>' % self.name
     def serialize(self):
-        return {                                                          #ciò che voglio mostrare e lo mostro come dizionario
+        return {                                                    
             "id": self.id,
             "name": self.name,
             "climate": self.climate,
@@ -57,10 +57,10 @@ class Favorites(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
     people_id = db.Column(db.Integer, db.ForeignKey('people.id'), nullable=True)
     planet_id = db.Column(db.Integer, db.ForeignKey('planet.id'), nullable=True)
-    def __repr__(self):                                                    #come mi riferisco al elemento del modello
+    def __repr__(self):                                                    
         return '<Favorites %r>' % self.id
     def serialize(self):
-        return {                                                          #ciò che voglio mostrare e lo mostro come dizionario
+        return {                                                         
             "id": self.id,
             "people_name": self.people.name if self.people else None,
             "planet_name": self.planet.name if self.planet else None
